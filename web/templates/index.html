@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<p><a class="btn" href="{{ url_for('web.nuevo_lote') }}">+ Registrar nuevo lote</a></p>
+
+{% if lotes %}
+<table>
+    <thead>
+        <tr>
+            <th>ID Lote</th>
+            <th>Cultivo</th>
+            <th>Tipo de semilla</th>
+            <th>Total sembradas</th>
+            <th>Semana actual</th>
+            <th>% Germinacion</th>
+            <th>Dictamen</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lote in lotes %}
+        <tr>
+            <td>{{ lote.id_lote }}</td>
+            <td>{{ lote.cultivo }}</td>
+            <td>{{ lote.tipo_semilla.describir() }}</td>
+            <td>{{ lote.total_semillas }}</td>
+            <td>{{ lote.semana_actual }}</td>
+            <td>{{ lote.calcular_porcentaje_germinacion() }}%</td>
+            <td>
+                {% if lote.esta_listo_para_evaluacion() %}
+                    {% if lote.es_apto() %}
+                        <span class="apto">APTO</span>
+                    {% else %}
+                        <span class="rechazado">RECHAZADO</span>
+                    {% endif %}
+                {% else %}
+                    En desarrollo
+                {% endif %}
+            </td>
+            <td>
+                <form class="inline" method="post" action="{{ url_for('web.registrar_germinacion', id_lote=lote.id_lote) }}">
+                    <input type="number" name="cantidad" placeholder="Cantidad" min="0" required style="width: 80px;">
+                    <button class="btn" type="submit">Registrar semana</button>
+                </form>
+                <form class="inline" method="post" action="{{ url_for('web.eliminar_lote', id_lote=lote.id_lote) }}">
+                    <button class="btn btn-eliminar" type="submit">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay lotes registrados todavia.</p>
+{% endif %}
+
+{% endblock %}

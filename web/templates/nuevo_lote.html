@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<h2>Registrar nuevo lote</h2>
+
+<form method="post" action="{{ url_for('web.nuevo_lote') }}">
+    <p>
+        <label for="id_lote">ID del lote:</label><br>
+        <input type="text" id="id_lote" name="id_lote" placeholder="Ej: LOT-MAIZ-2026" required>
+    </p>
+
+    <p>
+        <label for="cultivo">Cultivo:</label><br>
+        <input type="text" id="cultivo" name="cultivo" placeholder="Ej: Maiz, Frijol" required>
+    </p>
+
+    <p>
+        <label for="total_semillas">Total de semillas sembradas:</label><br>
+        <input type="number" id="total_semillas" name="total_semillas" min="1" required>
+    </p>
+
+    <p>
+        <label for="tipo_semilla">Tipo de semilla:</label><br>
+        <select id="tipo_semilla" name="tipo_semilla" required>
+            <option value="certificada">Certificada (minimo 85%)</option>
+            <option value="criolla">Criolla (minimo 70%)</option>
+        </select>
+    </p>
+
+    <p>
+        <button class="btn" type="submit">Guardar lote</button>
+        <a href="{{ url_for('web.index') }}">Cancelar</a>
+    </p>
+</form>
+
+{% endblock %}
