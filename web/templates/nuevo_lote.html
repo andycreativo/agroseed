@@ -4,6 +4,7 @@
 
 <h2>Registrar nuevo lote</h2>
 
+<!-- El formulario envia sus datos por POST a la misma ruta nuevo_lote() -->
 <form method="post" action="{{ url_for('web.nuevo_lote') }}">
     <p>
         <label for="id_lote">ID del lote:</label><br>
@@ -20,6 +21,7 @@
         <input type="number" id="total_semillas" name="total_semillas" min="1" required>
     </p>
 
+    <!-- El porcentaje minimo mostrado corresponde a TipoSemilla.porcentaje_minimo() -->
     <p>
         <label for="tipo_semilla">Tipo de semilla:</label><br>
         <select id="tipo_semilla" name="tipo_semilla" required>

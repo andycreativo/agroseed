@@ -2,6 +2,7 @@
 
 {% block contenido %}
 
+<!-- Enlace al formulario de registro de un nuevo lote -->
 <p><a class="btn" href="{{ url_for('web.nuevo_lote') }}">+ Registrar nuevo lote</a></p>
 
 {% if lotes %}
@@ -19,6 +20,7 @@
         </tr>
     </thead>
     <tbody>
+        <!-- Se recorre cada lote recibido como variable de contexto desde el backend -->
         {% for lote in lotes %}
         <tr>
             <td>{{ lote.id_lote }}</td>
@@ -28,6 +30,7 @@
             <td>{{ lote.semana_actual }}</td>
             <td>{{ lote.calcular_porcentaje_germinacion() }}%</td>
             <td>
+                <!-- El dictamen solo se muestra si el lote ya cumplio las semanas minimas -->
                 {% if lote.esta_listo_para_evaluacion() %}
                     {% if lote.es_apto() %}
                         <span class="apto">APTO</span>
@@ -39,10 +42,12 @@
                 {% endif %}
             </td>
             <td>
+                <!-- Formulario para registrar la germinacion de la semana actual -->
                 <form class="inline" method="post" action="{{ url_for('web.registrar_germinacion', id_lote=lote.id_lote) }}">
                     <input type="number" name="cantidad" placeholder="Cantidad" min="0" required style="width: 80px;">
                     <button class="btn" type="submit">Registrar semana</button>
                 </form>
+                <!-- Formulario para eliminar el lote -->
                 <form class="inline" method="post" action="{{ url_for('web.eliminar_lote', id_lote=lote.id_lote) }}">
                     <button class="btn btn-eliminar" type="submit">Eliminar</button>
                 </form>
