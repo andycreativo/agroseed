@@ -81,3 +81,10 @@ def vender_lote(id_lote):
         flash(str(e), "error")
 
     return redirect(url_for("web.index"))
+
+
+@bp.route("/tienda")
+def tienda():
+    """Vista simplificada para que un cliente vea los lotes disponibles y compre."""
+    lotes = lote_repository.listar_lotes()
+    return render_template("tienda.html", lotes=lotes)

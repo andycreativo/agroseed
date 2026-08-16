@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<h2>Tienda de semillas</h2>
+<p><a href="{{ url_for('web.index') }}">Volver al panel de administracion</a></p>
+
+{% if lotes %}
+<div class="tienda-grid">
+    {% for lote in lotes %}
+    <div class="producto">
+        <h3>{{ lote.cultivo }}</h3>
+        <p>{{ lote.tipo_semilla.describir() }}</p>
+        <p>
+            {% if lote.esta_agotado() %}
+                <span class="rechazado">AGOTADO</span>
+            {% else %}
+                <strong>{{ lote.cantidad_disponible }}</strong> disponibles
+            {% endif %}
+        </p>
+        {% if not lote.esta_agotado() %}
+        <form method="post" action="{{ url_for('web.vender_lote', id_lote=lote.id_lote) }}">
+            <input type="number" name="cantidad" min="1" max="{{ lote.cantidad_disponible }}" placeholder="Cantidad" required style="width: 80px;">
+            <button class="btn" type="submit">Comprar</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No hay lotes registrados todavia.</p>
+{% endif %}
+
+{% endblock %}
