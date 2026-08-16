@@ -1,0 +1,24 @@
+info:
+  name: Crear Lote
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://127.0.0.1:5000/api/lotes
+  body:
+    type: json
+    data: |-
+      {
+        "id_lote": "LOT-API-001",
+        "cultivo": "Frijol",
+        "total_semillas": 100,
+        "tipo_semilla": "criolla"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

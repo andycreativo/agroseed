@@ -17,12 +17,25 @@
         .btn { padding: 6px 12px; background-color: #2e7d32; color: white; text-decoration: none; border: none; border-radius: 4px; cursor: pointer; }
         .btn-eliminar { background-color: #c62828; }
         form.inline { display: inline; }
+        /* Mensajes emergentes (flash) */
+        .mensaje { padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; }
+        .mensaje-success { background-color: #dcedc8; color: #2e7d32; border: 1px solid #2e7d32; }
+        .mensaje-error { background-color: #fdecea; color: #c62828; border: 1px solid #c62828; }
+        .mensaje-warning { background-color: #fff3cd; color: #856404; border: 1px solid #856404; }
     </style>
 </head>
 <body>
     <h1>Agroseed</h1>
     <p>Sistema de gestion de lotes de semillas</p>
     <hr>
+    <!-- Muestra los mensajes flash enviados desde las rutas (exito, error, advertencia) -->
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+        {% if mensajes %}
+            {% for categoria, texto in mensajes %}
+                <div class="mensaje mensaje-{{ categoria }}">{{ texto }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <!-- Bloque que cada plantilla hija sobrescribe con su propio contenido -->
     {% block contenido %}{% endblock %}
 </body>

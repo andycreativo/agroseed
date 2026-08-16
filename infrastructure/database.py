@@ -30,9 +30,14 @@ def inicializar_base_datos() -> None:
             cultivo TEXT NOT NULL,
             total_semillas INTEGER NOT NULL,
             tipo_semilla TEXT NOT NULL,
-            semana_actual INTEGER NOT NULL DEFAULT 0
+            semana_actual INTEGER NOT NULL DEFAULT 0,
+            cantidad_disponible INTEGER NOT NULL DEFAULT 0
         )
     """)
+
+    columnas_existentes = [fila["name"] for fila in cursor.execute("PRAGMA table_info(lotes_semillas)")]
+    if "cantidad_disponible" not in columnas_existentes:
+        cursor.execute("ALTER TABLE lotes_semillas ADD COLUMN cantidad_disponible INTEGER NOT NULL DEFAULT 0")
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS registros_germinacion (
@@ -44,6 +49,12 @@ def inicializar_base_datos() -> None:
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            usuario TEXT PRIMARY KEY,
+            contrasena_hash TEXT NOT NULL
+        )
+    """)
+
     conexion.commit()
     conexion.close()
-    

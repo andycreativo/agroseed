@@ -3,7 +3,7 @@ Modulo web.routes
 Define las rutas (endpoints) de Flask que exponen la funcionalidad
 del sistema agroseed a traves del navegador.
 """
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 from domain.lote_semillas import LoteSemillas, RegistroGerminacion
 from domain.tipo_semilla import SemillaCertificada, SemillaCriolla
@@ -59,4 +59,25 @@ def registrar_germinacion(id_lote):
         lote_repository.agregar_registro_germinacion(id_lote, registro)
 
     lote_repository.actualizar_lote(lote)
+    return redirect(url_for("web.index"))
+
+
+@bp.route("/lotes/<id_lote>/vender", methods=["POST"])
+def vender_lote(id_lote):
+    """Registra una venta, descontando la cantidad vendida del lote."""
+    lote = lote_repository.obtener_lote_por_id(id_lote)
+    if lote is None:
+        return redirect(url_for("web.index"))
+
+    cantidad = int(request.form["cantidad"])
+    try:
+        lote.vender(cantidad)
+        lote_repository.actualizar_cantidad_disponible(id_lote, lote.cantidad_disponible)
+        if lote.esta_agotado():
+            flash(f"El lote {id_lote} quedo agotado.", "warning")
+        else:
+            flash(f"Venta registrada. Quedan {lote.cantidad_disponible} unidades disponibles.", "success")
+    except ValueError as e:
+        flash(str(e), "error")
+
     return redirect(url_for("web.index"))

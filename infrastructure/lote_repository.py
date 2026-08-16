@@ -36,8 +36,8 @@ def crear_lote(lote: LoteSemillas) -> None:
     cursor = conexion.cursor()
     cursor.execute(
         """
-        INSERT INTO lotes_semillas (id_lote, cultivo, total_semillas, tipo_semilla, semana_actual)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO lotes_semillas (id_lote, cultivo, total_semillas, tipo_semilla, semana_actual, cantidad_disponible)
+        VALUES (?, ?, ?, ?, ?, ?)
         """,
         (
             lote.id_lote,
@@ -45,6 +45,7 @@ def crear_lote(lote: LoteSemillas) -> None:
             lote.total_semillas,
             _nombre_tipo_semilla(lote.tipo_semilla),
             lote.semana_actual,
+            lote.cantidad_disponible,
         ),
     )
     conexion.commit()
@@ -66,6 +67,7 @@ def listar_lotes() -> list[LoteSemillas]:
             tipo_semilla=_crear_tipo_semilla(fila["tipo_semilla"]),
         )
         lote.semana_actual = fila["semana_actual"]
+        lote.cantidad_disponible = fila["cantidad_disponible"]
 
         filas_registros = cursor.execute(
             "SELECT * FROM registros_germinacion WHERE id_lote = ?", (lote.id_lote,)
@@ -129,4 +131,15 @@ def agregar_registro_germinacion(id_lote: str, registro: RegistroGerminacion) ->
     )
     conexion.commit()
     conexion.close()
-    
+
+
+def actualizar_cantidad_disponible(id_lote: str, nueva_cantidad: int) -> None:
+    """Actualiza unicamente la cantidad disponible de un lote (usado al vender)."""
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute(
+        "UPDATE lotes_semillas SET cantidad_disponible = ? WHERE id_lote = ?",
+        (nueva_cantidad, id_lote),
+    )
+    conexion.commit()
+    conexion.close()

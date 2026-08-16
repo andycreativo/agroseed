@@ -13,6 +13,7 @@
             <th>Cultivo</th>
             <th>Tipo de semilla</th>
             <th>Total sembradas</th>
+            <th>Disponibles</th>
             <th>Semana actual</th>
             <th>% Germinacion</th>
             <th>Dictamen</th>
@@ -27,6 +28,13 @@
             <td>{{ lote.cultivo }}</td>
             <td>{{ lote.tipo_semilla.describir() }}</td>
             <td>{{ lote.total_semillas }}</td>
+            <td>
+                {% if lote.esta_agotado() %}
+                    <span class="rechazado">AGOTADO</span>
+                {% else %}
+                    {{ lote.cantidad_disponible }}
+                {% endif %}
+            </td>
             <td>{{ lote.semana_actual }}</td>
             <td>{{ lote.calcular_porcentaje_germinacion() }}%</td>
             <td>
@@ -46,6 +54,11 @@
                 <form class="inline" method="post" action="{{ url_for('web.registrar_germinacion', id_lote=lote.id_lote) }}">
                     <input type="number" name="cantidad" placeholder="Cantidad" min="0" required style="width: 80px;">
                     <button class="btn" type="submit">Registrar semana</button>
+                </form>
+                <!-- Formulario para registrar una venta -->
+                <form class="inline" method="post" action="{{ url_for('web.vender_lote', id_lote=lote.id_lote) }}">
+                    <input type="number" name="cantidad" placeholder="Vender" min="1" required style="width: 80px;">
+                    <button class="btn" type="submit">Vender</button>
                 </form>
                 <!-- Formulario para eliminar el lote -->
                 <form class="inline" method="post" action="{{ url_for('web.eliminar_lote', id_lote=lote.id_lote) }}">

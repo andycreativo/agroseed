@@ -30,6 +30,7 @@ class LoteSemillas:
         self.tipo_semilla = tipo_semilla
         self.semana_actual = 0
         self.registros_germinacion: list[RegistroGerminacion] = []
+        self.cantidad_disponible = total_semillas
 
     def avanzar_semana(self) -> None:
         """Incrementa en uno el contador de semanas transcurridas del lote."""
@@ -70,4 +71,15 @@ class LoteSemillas:
         contra el minimo requerido segun su tipo de semilla.
         """
         return self.calcular_porcentaje_germinacion() >= self.tipo_semilla.porcentaje_minimo()
+
+    def vender(self, cantidad):
+        if cantidad <= 0:
+            raise ValueError("La cantidad a vender debe ser mayor que cero")
+        if cantidad > self.cantidad_disponible:
+            raise ValueError("No hay suficiente cantidad disponible en el lote")
+        self.cantidad_disponible -= cantidad
+        return self.cantidad_disponible
+
+    def esta_agotado(self):
+        return self.cantidad_disponible <= 0
     

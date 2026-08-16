@@ -1,0 +1,15 @@
+info:
+  name: Obtener Lote
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: http://127.0.0.1:5000/api/lotes/LOT-API-001
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

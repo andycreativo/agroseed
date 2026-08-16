@@ -14,6 +14,7 @@ from web.api_routes import api_bp          # <-- NUEVO
 def crear_aplicacion() -> Flask:
     """Crea y configura la instancia de la aplicacion Flask."""
     app = Flask(__name__)
+    app.secret_key = "clave-secreta-agroseed-desarrollo"  # cambiar en produccion
     app.register_blueprint(web_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(api_bp)          # <-- NUEVO
@@ -23,4 +24,4 @@ def crear_aplicacion() -> Flask:
 if __name__ == "__main__":
     inicializar_base_datos()
     app = crear_aplicacion()
-    app.run(debug=True)
+    app.run(debug=False, use_reloader=False)
